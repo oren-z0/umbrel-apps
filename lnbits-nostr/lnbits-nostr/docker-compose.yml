@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: lnbits-nostr_web_1
+      APP_PORT: 3014
+      PROXY_AUTH_ADD: "false"
+  
+  web:
+    image: orenz0/lnbits:0.12.2rc2@sha256:9635cb60419c25b85dd0c2b21c56809eb54fe77a23207b9dba3862011c8f7777
+    init: true
+    restart: on-failure
+    stop_grace_period: 1m
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+      - ${APP_LIGHTNING_NODE_DATA_DIR}:/lnd:ro
+    environment:
+      # Global
+      LNBITS_HOST: "0.0.0.0"
+      LNBITS_PORT: 3014
+      LNBITS_DATA_FOLDER: "/data"
+
+      # LND
+      LNBITS_BACKEND_WALLET_CLASS: LndRestWallet
+      LND_REST_ENDPOINT: https://$APP_LIGHTNING_NODE_IP:$APP_LIGHTNING_NODE_REST_PORT/
+      LND_REST_CERT: "/lnd/tls.cert"
+      LND_REST_MACAROON: "/lnd/data/chain/bitcoin/$APP_BITCOIN_NETWORK/admin.macaroon"
+
+      # App
+      LNBITS_SITE_TITLE: "LNbits - Umbrel"
+      LNBITS_DEFAULT_WALLET_NAME: "LNbits wallet"
+      LNBITS_DISABLED_EXTENSIONS: "amilk"
+      LNBITS_ADMIN_EXTENSIONS: "ngrok"
+      LNBITS_ADMIN_UI: "true"
+      SUPER_USER: "$APP_PASSWORD"
+
+      LNBITS_HTTP2NOSTR_HOST: lnbits-nostr_http2nostr_1
+      LNBITS_NOSTR2HTTP_NPROFILE_FILEPATH: /data/nostr2http.nprofile
+      LNBITS_NOSTR2HTTP_RELAYS_FILEPATH: /data/nostr2http.relays
+  http2nostr:
+    image: orenz0/http2nostr:v0.3.2@sha256:5a00658f8e17ecb95983bb8b3c19836d9ff010f1c540ae71d7a702f5c7263a16
+    init: true
+    restart: on-failure
+    stop_grace_period: 1m
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    command: --nsec-file /data/http2nostr.nsec --save-nsec --exit-on-file-change
+  nostr2http:
+    image: orenz0/nostr2http:v0.2.4@sha256:00883139510d12683a1e483fc73cd4501c870716d451666432334b0f1a2bc40a
+    init: true
+    restart: on-failure
+    stop_grace_period: 1m
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    command: >-
+      --nsec-file /data/nostr2http.nsec
+      --save-nsec
+      --save-nprofile-file /data/nostr2http.nprofile
+      --relays-file /data/nostr2http.relays
+      --response-manipulator-file /data/nostr2http-response-manipulator.js
+      --allowed-routes '/lnurlp/**'
+      --exit-on-file-change
+      http://lnbits-nostr_web_1:3014
