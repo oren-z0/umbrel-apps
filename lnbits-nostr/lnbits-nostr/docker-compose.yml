@@ -47,7 +47,7 @@ services:
       - ${APP_DATA_DIR}/data:/data
     command: --nsec-file /data/http2nostr.nsec --save-nsec --exit-on-file-change
   nostr2http:
-    image: orenz0/nostr2http:v0.2.4@sha256:00883139510d12683a1e483fc73cd4501c870716d451666432334b0f1a2bc40a
+    image: orenz0/nostr2http:v0.3.0@sha256:9fe902ae67e7b63c1a39ddac39fd775d228db992618fd96aa7804521ad7847fd
     init: true
     restart: on-failure
     stop_grace_period: 1m
