@@ -8,7 +8,7 @@ services:
       PROXY_AUTH_ADD: "false"
   
   web:
-    image: orenz0/lnbits:0.12.2rc2@sha256:9635cb60419c25b85dd0c2b21c56809eb54fe77a23207b9dba3862011c8f7777
+    image: orenz0/lnbits:0.12.2rc3@sha256:d90ca7dd620de2d431e92558db2a99a5972f3837f1deaf8a20b34b5fb132ec54
     init: true
     restart: on-failure
     stop_grace_period: 1m
