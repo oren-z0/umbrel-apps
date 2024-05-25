@@ -62,7 +62,6 @@ services:
       --save-nsec
       --save-nprofile-file /data/nostr2http.nprofile
       --relays-file /data/nostr2http.relays
-      --response-manipulator-file /data/nostr2http-response-manipulator.js
       --allowed-routes '/lnurlp/**'
       --exit-on-file-change
       http://lnbits-nostr_web_1:3014

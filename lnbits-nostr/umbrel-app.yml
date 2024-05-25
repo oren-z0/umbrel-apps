@@ -2,7 +2,7 @@ manifestVersion: 1
 id: lnbits-nostr
 category: bitcoin
 name: LNbits Nostr
-version: "0.12.2-rc5"
+version: "0.12.2-rc6"
 tagline: Multi-user wallet management system
 description: >-
   LNbits is a simple multi-user and account system for Lightning
