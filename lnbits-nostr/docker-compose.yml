@@ -45,7 +45,11 @@ services:
     stop_grace_period: 1m
     volumes:
       - ${APP_DATA_DIR}/data:/data
-    command: --nsec-file /data/http2nostr.nsec --save-nsec --exit-on-file-change
+    command: >-
+      --nsec-file /data/http2nostr.nsec
+      --save-nsec
+      --exit-on-file-change
+      --port 80
   nostr2http:
     image: orenz0/nostr2http:v0.3.0@sha256:9fe902ae67e7b63c1a39ddac39fd775d228db992618fd96aa7804521ad7847fd
     init: true
