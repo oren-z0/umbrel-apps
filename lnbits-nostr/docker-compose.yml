@@ -41,8 +41,8 @@ services:
   http2nostr:
     image: orenz0/http2nostr:v0.3.2@sha256:5a00658f8e17ecb95983bb8b3c19836d9ff010f1c540ae71d7a702f5c7263a16
     init: true
-    restart: on-failure
-    stop_grace_period: 1m
+    restart: unless-stopped
+    stop_grace_period: 10s
     volumes:
       - ${APP_DATA_DIR}/data:/data
     command: >-
@@ -53,8 +53,8 @@ services:
   nostr2http:
     image: orenz0/nostr2http:v0.3.0@sha256:9fe902ae67e7b63c1a39ddac39fd775d228db992618fd96aa7804521ad7847fd
     init: true
-    restart: on-failure
-    stop_grace_period: 1m
+    restart: unless-stopped
+    stop_grace_period: 10s
     volumes:
       - ${APP_DATA_DIR}/data:/data
     command: >-
